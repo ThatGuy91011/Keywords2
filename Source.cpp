@@ -10,8 +10,12 @@ using namespace std;
 
 int main()
 {
+	//String to hold the user's name
 	string name;
+
+	//string to check if the player wants to play again or not
 	string wantToPlayAgain;
+	
 	// Display Title of the program to the user
 	cout << "-----Welcome to Keywords II: Electric Boogaloo-----" << endl << endl;
 	
@@ -32,109 +36,140 @@ int main()
 	int simulationNumber = 1;
 	do
 	{
-
-		const int MAX_WRONG = 8;
-
-		// Create a collection of 10 words you had written down manually
-		vector<string> words;
-		words.push_back("UNKNOWN");
-		words.push_back("ENEMY");
-		words.push_back("WATCHTOWER");
-		words.push_back("RENDEZVOUS");
-		words.push_back("TONIGHT");
-		words.push_back("TRAPWORD");
-		words.push_back("COMPUTER");
-		words.push_back("MISSION");
-		words.push_back("TARGET");
-		words.push_back("IMPOSSIBLE");
-
-		srand(static_cast<unsigned int>(time(0)));
-		random_shuffle(words.begin(), words.end());
-
-		const string THE_WORD = words[0];
-		int wrong = 0;
-		string soFar(THE_WORD.size(), '-');
-		string used = "";
-
-
 		// Display the simulation # is starting to the recruit.
 		cout << endl <<  "Simulation #" << simulationNumber << " starting..." << endl << endl << endl;
-		simulationNumber++;
 
-		// While recruit hasn’t made too many incorrect guesses and hasn’t guessed the secret word
-		while ((wrong < MAX_WRONG) && (soFar != THE_WORD))
+
+		// Pick new 3 random words from your collection as the secret code word the recruit has to guess. 
+		for (int x = 0; x < 3; x++)
 		{
-			// Tell recruit how many incorrect guesses he or she has left
-			cout << "You have " << (MAX_WRONG - wrong) << " wrong guesses left" << endl;
-			// Show recruit the letters he or she has guessed
-			cout << "You've already guessed: " << endl << used << endl;
-			// Show player how much of the secret word he or she has guessed
-			cout << "The word so far: " << endl << soFar << endl << endl;
 
-			char guess;
+			//A variable to hold the maximum number of wrong answers a player can give before they lose
+			const int MAX_WRONG = 8;
 
-			//     Get recruit's next guess
-			cout << name << ", enter your guess: ";
-			cin >> guess;
-			guess = toupper(guess);
+			// Create a collection of 10 words you had written down manually
+			vector<string> words;
+			words.push_back("UNKNOWN");
+			words.push_back("ENEMY");
+			words.push_back("WATCHTOWER");
+			words.push_back("RENDEZVOUS");
+			words.push_back("TONIGHT");
+			words.push_back("TRAPWORD");
+			words.push_back("COMPUTER");
+			words.push_back("MISSION");
+			words.push_back("TARGET");
+			words.push_back("IMPOSSIBLE");
 
-			//     While recruit has entered a letter that he or she has already guessed
-			while (used.find(guess) != string::npos)
+			//Randomizes the word choice
+			srand(static_cast<unsigned int>(time(0)));
+			random_shuffle(words.begin(), words.end());
+
+			//String variable to hold the word itself in an array
+			const string THE_WORD = words[0];
+
+			//Variable to hold how many wrong guesses the player has given
+			int wrong = 0;
+
+			//String variable to hold the word with the letters the player has already guessed
+			string soFar(THE_WORD.size(), '-');
+
+			//String variable to hold the letters the player has already guessed
+			string used = "";
+
+
+			// While recruit hasn’t made too many incorrect guesses and hasn’t guessed the secret word
+			while ((wrong < MAX_WRONG) && (soFar != THE_WORD))
 			{
-				cout << "You've already guessed " << guess << endl;
-				//          Get recruit ’s guess
+				// Tell recruit how many incorrect guesses he or she has left
+				cout << "You have " << (MAX_WRONG - wrong) << " wrong guesses left" << endl;
+				
+				// Show recruit the letters he or she has guessed
+				cout << "You've already guessed: " << endl << used << endl;
+				
+				// Show player how much of the secret word he or she has guessed
+				cout << "The word so far: " << endl << soFar << endl << endl;
+
+				//Variable to hold the player's guess
+				char guess;
+
+				// Get recruit's next guess
 				cout << name << ", enter your guess: ";
 				cin >> guess;
+
+				//Changes any lowercase letter the player inputs to be uppercase
 				guess = toupper(guess);
-			}
 
-			//     Add the new guess to the group of used letters
-			used += guess;
-
-			//     If the guess is in the secret word
-			if (THE_WORD.find(guess) != string::npos)
-			{
-				//          Tell the recruit the guess is correct
-				cout << "Correct " << name << ". " << guess << " is in the answer!" << endl;
-
-				//          Update the word guessed so far with the new letter
-				for (int i = 0; i < THE_WORD.length(); ++i)
+				// While recruit has entered a letter that he or she has already guessed
+				while (used.find(guess) != string::npos)
 				{
-					if (THE_WORD[i] == guess)
+					cout << "You've already guessed " << guess << endl;
+					//  Get recruit ’s guess
+					cout << name << ", enter your guess: ";
+					cin >> guess;
+					guess = toupper(guess);
+				}
+
+				// Add the new guess to the group of used letters
+				used += guess;
+
+				// If the guess is in the secret word
+				if (THE_WORD.find(guess) != string::npos)
+				{
+					//  Tell the recruit the guess is correct
+					cout << "Correct " << name << ". " << guess << " is in the answer!" << endl;
+
+					//  Update the word guessed so far with the new letter
+					for (int i = 0; i < THE_WORD.length(); ++i)
 					{
-						soFar[i] = guess;
+						if (THE_WORD[i] == guess)
+						{
+							soFar[i] = guess;
+						}
 					}
 				}
+				// Otherwise
+				else
+				{
+					//  Tell the recruit the guess is incorrect
+					cout << "Sorry, " << guess << " is not in the answer." << endl << endl;
+					//  Increment the number of incorrect guesses the recruit has made
+					++wrong;
+				}
+
+
 			}
-			//     Otherwise
+			// If the recruit has made too many incorrect guesses
+			if (wrong == MAX_WRONG)
+			{
+				// Tell the recruit that he or she has failed the Keywords II course.
+				cout << "You have failed this time, " << name << ", but don't let it discourage you" << endl << endl;
+			}
+			// Otherwise
 			else
 			{
-				//          Tell the recruit the guess is incorrect
-				cout << "Sorry, " << guess << " is not in the answer." << endl << endl;
-				//          Increment the number of incorrect guesses the recruit has made
-				++wrong;
+				// Congratulate the recruit on guessing the secret words
+				cout << "You got it!" << endl << endl;
 			}
-			 
 
+			cout << "The word was " << THE_WORD << endl << endl;
 		}
-		// If the recruit has made too many incorrect guesses
-		if (wrong == MAX_WRONG)
-		{
-			//     Tell the recruit that he or she has failed the Keywords II course.
-			cout << "You have failed this time, "  << name << ", but don't let it discourage you" << endl << endl;
-		}
-		// Otherwise
-		else
-		{
-			//     Congratulate the recruit on guessing the secret words
-			cout << "You got it!" << endl << endl;
-		}
-
-		cout << "The word was " << THE_WORD << endl << endl;
-
+		// Ask the recruit if they would like to run the simulation again
 		cout << "Want to play again?(Y/N) ";
 		cin >> wantToPlayAgain;
 
+		// If the recruit wants to run the simulation again
+		if (wantToPlayAgain == "y" || wantToPlayAgain == "Y")
+		{
+			simulationNumber++;
+		}
+
 	} while (wantToPlayAgain == "y" || wantToPlayAgain == "Y");
+
+	// Display End of Simulations to the recruit
+
+	cout << "So long, " << name << endl;
+
+	// Pause the Simulation with press any key to continue
+	system("pause");
 	return 0;
 }
